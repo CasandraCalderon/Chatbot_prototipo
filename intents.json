@@ -1,0 +1,39 @@
+{
+    "intents": [
+      {
+        "tag": "saludo",
+        "patterns": [
+          "Hola",
+          "Hey",
+          "Hay alguien ahi?",
+          "Buen dia"
+        ],
+        "responses": [
+          "Hey :)",
+          "Hola, gracias por comunicarte conmigo",
+          "Hola, que puedo hacer por ti?",
+          "Hola, puedo ayudarte?",
+          "Buen dia, puedo ayudarte en algo? :)"
+        ]
+      },
+      {
+        "tag": "adios",
+        "patterns": ["Adios", "Nos vemos", "Hasta luego"],
+        "responses": [
+          "Nos vemos despues",
+          "Ten un lindo dia",
+          "Adios, vuelve pronto"
+        ]
+      },
+      {
+        "tag": "gracias",
+        "patterns": ["Gracias", "Muchas gracias", "Gracias por la ayuda"],
+        "responses": ["Me alegra haberte ayudado", "Cuando quieras!"]
+      },
+      {
+        "tag": "estado",
+        "patterns": ["¿Como estas?", "¿Estas bien?", "¿Como te sientes?"],
+        "responses": ["Estoy muy bien, gracias por preguntar <3", "Algo agotada, pero lista para responder a tus dudas!"]
+      }
+    ]
+  }
