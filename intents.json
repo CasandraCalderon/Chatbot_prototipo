@@ -34,6 +34,11 @@
         "tag": "estado",
         "patterns": ["¿Como estas?", "¿Estas bien?", "¿Como te sientes?"],
         "responses": ["Estoy muy bien, gracias por preguntar <3", "Algo agotada, pero lista para responder a tus dudas!"]
+      },
+      {
+        "tag": "link",
+        "patterns": ["Manda un link"],
+        "responses": ["Entra al siguiente link: https://www.youtube.com/"]
       }
     ]
   }
