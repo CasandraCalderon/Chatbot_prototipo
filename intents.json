@@ -6,7 +6,8 @@
           "Hola",
           "Hey",
           "Hay alguien ahi?",
-          "Buen dia"
+          "Buen dia",
+          "Necesito ayuda"
         ],
         "responses": [
           "Hey :)",
@@ -32,13 +33,24 @@
       },
       {
         "tag": "estado",
-        "patterns": ["¿Como estas?", "¿Estas bien?", "¿Como te sientes?"],
+        "patterns": ["Como estas?", "Estas bien?", "Como te sientes?"],
         "responses": ["Estoy muy bien, gracias por preguntar <3", "Algo agotada, pero lista para responder a tus dudas!"]
       },
       {
-        "tag": "link",
-        "patterns": ["Manda un link"],
-        "responses": ["Entra al siguiente link: https://www.youtube.com/"]
+        "tag": "matricula",
+        "patterns": ["Quiero saber informacion de matricula", "Matriculas"],
+        "responses": ["Dime que quieres saber sobre las matriculas, el costo de matricula? la direccion para recoger la matricula? es toda la informacion que puedo ofrecerte :)"]
+      },
+      {
+        "tag": "pre_matricula",
+        "patterns": ["Cuanto cuesta la matricula", "precio matricula", "costo matricula"],
+        "responses": ["El costo de la matricula es de 25 bs"]
+      },
+      {
+        "tag": "dir_matricula",
+        "patterns": ["A que direccion puedo recoger la matricula?", "direccion de matricula"],
+        "responses": ["Claro! Aqui tienes la direccion para comprar tu matricula <a href='https://goo.gl/maps/uSkweGYEPjfp8Tan6'>Direccion de Ciudadela universitaria</a>"]
       }
+
     ]
   }

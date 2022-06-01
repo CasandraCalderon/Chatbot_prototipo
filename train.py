@@ -2,36 +2,41 @@ import numpy as np
 import random
 import json
 
+# Pytorch
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
+#Importamos las funciones de nltk_utils
 from nltk_utils import bag_of_words, tokenize, stem
 from model import NeuralNet
-
+# Importamos el archivo JSON en modo lectura
 with open('intents.json', 'r') as f:
     intents = json.load(f)
 
+# Todas las palabras
 all_words = []
+# Etiquetas
 tags = []
+# Patrones
 xy = []
-# loop through each sentence in our intents patterns
+# Recorrera cada oracion en nuestros patrones de intents
 for intent in intents['intents']:
     tag = intent['tag']
-    # add to tag list
+    # Añadir a la matriz tags
     tags.append(tag)
     for pattern in intent['patterns']:
-        # tokenize each word in the sentence
+        # Tokenizar cada palabra en la oracion
         w = tokenize(pattern)
-        # add to our words list
+        # Añadir en en nuestra lista de palabras all_words
         all_words.extend(w)
-        # add to xy pair
+        # Se añade cada oracion tokenizada a su tag
         xy.append((w, tag))
 
-# stem and lower each word
+# stem y convertir ignorar caracteres especiales
 ignore_words = ['¿','?', '.', '¡', '!', ',']
 all_words = [stem(w) for w in all_words if w not in ignore_words]
-# remove duplicates and sort
+# Eliminar palabras duplicadas
 all_words = sorted(set(all_words))
 tags = sorted(set(tags))
 
@@ -39,19 +44,22 @@ print(len(xy), "patterns")
 print(len(tags), "tags:", tags)
 print(len(all_words), "unique stemmed words:", all_words)
 
-# create training data
+
+# Creacion de los datos de entrenamiento
 X_train = []
 y_train = []
 for (pattern_sentence, tag) in xy:
-    # X: bag of words for each pattern_sentence
+    # X_train: bolsa de palabras para cada pattern_sentence
     bag = bag_of_words(pattern_sentence, all_words)
     X_train.append(bag)
-    # y: PyTorch CrossEntropyLoss needs only class labels, not one-hot
+    # y: PyTorch CrossEntropyLoss solo necesita etiquetas de clase
     label = tags.index(tag)
     y_train.append(label)
 
+# Ambas matrices lo convertimos a una matriz numpy
 X_train = np.array(X_train)
 y_train = np.array(y_train)
+
 
 # Hyper-parameters 
 num_epochs = 1000
