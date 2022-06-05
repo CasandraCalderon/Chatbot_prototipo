@@ -40,18 +40,23 @@ def get_response(msg):
 
     probs = torch.softmax(output, dim=1)
     prob = probs[0][predicted.item()]
-    if prob.item() > 0.75:
+    if prob.item() > 0.85:
         for intent in intents['intents']:
             if tag == intent["tag"]:
                 return random.choice(intent['responses'])
-    
-    return "Aun no tengo respuesta para eso."
+    filename = 'msg.json'
+    with open(filename, "r+") as file:
+        data = json.load(file)
+        entry = {'id': len(data['messages'])+1, 'msg':msg}
+        data['messages'].append(entry)
+        file.seek(0)
+        json.dump(data, file)
+    return "Aun no tengo la respuesta para eso."
 
 
 if __name__ == "__main__":
     print("Hola! (type 'quit' to exit)")
     while True:
-        # sentence = "do you use credit cards?"
         sentence = input("You: ")
         if sentence == "quit":
             break
