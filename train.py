@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import requests
 import json
 
 # Pytorch
@@ -11,8 +12,11 @@ from torch.utils.data import Dataset, DataLoader
 from nltk_utils import bag_of_words, tokenize, stem
 from model import NeuralNet
 # Importamos el archivo JSON en modo lectura
-with open('intents.json', 'r') as f:
-    intents = json.load(f)
+#with open('intents.json', 'r') as f:
+#    intents = json.load(f)
+request = requests.get("http://localhost:4000/intents").text
+intents = json.loads(request)
+
 
 # Todas las palabras
 all_words = []

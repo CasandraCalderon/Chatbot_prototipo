@@ -1,4 +1,5 @@
 import random
+import requests
 import json
 
 import torch
@@ -8,8 +9,8 @@ from nltk_utils import bag_of_words, tokenize
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-with open('intents.json', 'r') as json_data:
-    intents = json.load(json_data)
+request = requests.get("http://localhost:4000/intents").text
+intents = json.loads(request)
 
 FILE = "data.pth"
 data = torch.load(FILE)
@@ -43,7 +44,8 @@ def get_response(msg):
     if prob.item() > 0.85:
         for intent in intents['intents']:
             if tag == intent["tag"]:
-                return random.choice(intent['responses'])
+                #return random.choice(intent['responses'])
+                return (intent['responses'])
     filename = 'msg.json'
     with open(filename, "r+") as file:
         data = json.load(file)

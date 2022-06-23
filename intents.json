@@ -8,13 +8,7 @@
           "Hay alguien ahi?",
           "Buen dia"
         ],
-        "responses": [
-          "Hey :)",
-          "Hola, gracias por comunicarte conmigo",
-          "Hola, que puedo hacer por ti?",
-          "Hola, puedo ayudarte?",
-          "Buen dia, puedo ayudarte en algo? :)"
-        ]
+        "responses": "Hola :)"
       },
       {
         "tag": "adios",
