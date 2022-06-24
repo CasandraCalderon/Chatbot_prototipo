@@ -46,6 +46,7 @@ def get_response(msg):
             if tag == intent["tag"]:
                 #return random.choice(intent['responses'])
                 return (intent['responses'])
+    """
     filename = 'msg.json'
     with open(filename, "r+") as file:
         data = json.load(file)
@@ -53,7 +54,13 @@ def get_response(msg):
         data['messages'].append(entry)
         file.seek(0)
         json.dump(data, file)
-    return "Aun no tengo la respuesta para eso."
+    """
+
+    request_msg = requests.get("http://localhost:4000/msg").text
+    messages = json.loads(request_msg)
+    payload = {'id':len(messages['messages'])+1, 'msg':msg}
+    resp_msg = requests.post("http://localhost:4000/msg", json=payload )
+    return ("Aun no tengo respuesta para esa peticion")
 
 
 if __name__ == "__main__":
