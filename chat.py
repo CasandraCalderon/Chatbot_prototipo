@@ -1,17 +1,19 @@
-import random
 import requests
 import json
-
+from pymongo import MongoClient
 import torch
 
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
+"""
 request = requests.get("http://localhost:4000/intents").text
 intents = json.loads(request)
-
+"""
+client = MongoClient("mongodb+srv://Angie:62426426848648@cluster0.abxoiod.mongodb.net/?retryWrites=true&w=majority")
+db = client.get_database('Chatbot')
+intents = db.intents
 FILE = "data.pth"
 data = torch.load(FILE)
 
@@ -42,24 +44,12 @@ def get_response(msg):
     probs = torch.softmax(output, dim=1)
     prob = probs[0][predicted.item()]
     if prob.item() > 0.85:
-        for intent in intents['intents']:
+        for intent in intents.find():
             if tag == intent["tag"]:
-                #return random.choice(intent['responses'])
                 return (intent['responses'])
-    """
-    filename = 'msg.json'
-    with open(filename, "r+") as file:
-        data = json.load(file)
-        entry = {'id': len(data['messages'])+1, 'msg':msg}
-        data['messages'].append(entry)
-        file.seek(0)
-        json.dump(data, file)
-    """
-
-    request_msg = requests.get("http://localhost:4000/msg").text
-    messages = json.loads(request_msg)
-    payload = {'id':len(messages['messages'])+1, 'msg':msg}
-    resp_msg = requests.post("http://localhost:4000/msg", json=payload )
+    records = db.messages
+    payload = {'msg':msg}
+    records.insert_one(payload)
     return ("Aun no tengo respuesta para esa peticion")
 
 

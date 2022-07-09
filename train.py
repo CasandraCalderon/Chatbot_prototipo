@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import requests
+from pymongo import MongoClient
 import json
 
 # Pytorch
@@ -14,8 +15,13 @@ from model import NeuralNet
 # Importamos el archivo JSON en modo lectura
 #with open('intents.json', 'r') as f:
 #    intents = json.load(f)
+"""
 request = requests.get("http://localhost:4000/intents").text
 intents = json.loads(request)
+"""
+client = MongoClient("mongodb+srv://Angie:62426426848648@cluster0.abxoiod.mongodb.net/?retryWrites=true&w=majority")
+db = client.get_database('Chatbot')
+intents = db.intents
 
 
 # Todas las palabras
@@ -25,7 +31,7 @@ tags = []
 # Patrones
 xy = []
 # Recorrera cada oracion en nuestros patrones de intents
-for intent in intents['intents']:
+for intent in intents.find():
     tag = intent['tag']
     # Añadir a la matriz tags
     tags.append(tag)
@@ -53,19 +59,17 @@ print(len(all_words), "unique stemmed words:", all_words)
 X_train = []
 y_train = []
 for (pattern_sentence, tag) in xy:
-    # X_train: bolsa de palabras para cada pattern_sentence
     bag = bag_of_words(pattern_sentence, all_words)
     X_train.append(bag)
-    # y: PyTorch CrossEntropyLoss solo necesita etiquetas de clase
     label = tags.index(tag)
     y_train.append(label)
 
-# Ambas matrices lo convertimos a una matriz numpy
+
 X_train = np.array(X_train)
 y_train = np.array(y_train)
 
 
-# Hyper-parameters 
+# Hiper-parametros
 num_epochs = 1000
 batch_size = 8
 learning_rate = 0.001
@@ -81,11 +85,9 @@ class ChatDataset(Dataset):
         self.x_data = X_train
         self.y_data = y_train
 
-    # support indexing such that dataset[i] can be used to get i-th sample
     def __getitem__(self, index):
         return self.x_data[index], self.y_data[index]
 
-    # we can call len(dataset) to return the size
     def __len__(self):
         return self.n_samples
 
@@ -99,23 +101,20 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 model = NeuralNet(input_size, hidden_size, output_size).to(device)
 
-# Loss and optimizer
+# Perdida y optimizacion
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-# Train the model
+
 for epoch in range(num_epochs):
     for (words, labels) in train_loader:
         words = words.to(device)
         labels = labels.to(dtype=torch.long).to(device)
         
-        # Forward pass
+     
         outputs = model(words)
-        # if y would be one-hot, we must apply
-        # labels = torch.max(labels, 1)[1]
         loss = criterion(outputs, labels)
         
-        # Backward and optimize
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
